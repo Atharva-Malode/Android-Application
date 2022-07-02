@@ -10,6 +10,15 @@ class MyApp extends StatefulWidget {
   State<MyApp> createState() => _MyAppState();
 }
 
+MiniPlayer() {
+  return AnimatedContainer(
+    duration: const Duration(milliseconds: 500),
+    color: Colors.blueGrey,
+    // width: deviceSize.width,
+    height: 50,
+  );
+}
+
 class _MyAppState extends State<MyApp> {
   final Tabs = [Home(), Search(), yourLibrary()];
   int currentTabIndex = 0;

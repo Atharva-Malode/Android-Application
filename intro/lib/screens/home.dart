@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:intro/models/category.dart';
+import 'package:intro/models/music.dart';
 import 'package:intro/services/category_operation.dart';
+import 'package:intro/services/music_operations.dart';
 
 class Home extends StatelessWidget {
   const Home({Key? key}) : super(key: key);
@@ -29,12 +31,63 @@ class Home extends StatelessWidget {
     return categories;
   }
 
+  Widget createMusic(Music music) {
+    return Padding(
+      padding: EdgeInsets.all(7),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(
+            height: 200,
+            width: 200,
+            child: InkWell(
+              child: Image.network(
+                music.image,
+                fit: BoxFit.cover,
+              ),
+            ),
+          ),
+          Text(
+            music.name,
+            style: TextStyle(color: Colors.white),
+          ),
+          Text(music.desc, style: TextStyle(color: Colors.white))
+        ],
+      ),
+    );
+  }
+
+  Widget createMusicList(String label) {
+    List<Music> musicList = MusicOperations.getMusic();
+    return Padding(
+      padding: EdgeInsets.only(left: 10),
+      child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+        Text(
+          label,
+          style: TextStyle(
+              color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold),
+        ),
+        Container(
+          height: 275,
+          child: ListView.builder(
+            //padding: EdgeInsets.all(5),
+            scrollDirection: Axis.horizontal,
+            itemBuilder: (ctx, index) {
+              return createMusic(musicList[index]);
+            },
+            itemCount: musicList.length,
+          ),
+        )
+      ]),
+    );
+  }
+
   Widget createGrid() {
     return Container(
       padding: EdgeInsets.all(10),
-      height: 400,
+      height: 280,
       child: GridView.count(
-        childAspectRatio: 4 / 2,
+        childAspectRatio: 5 / 2,
         crossAxisSpacing: 10,
         mainAxisSpacing: 10,
         children: createListOfCategories(),
@@ -57,25 +110,29 @@ class Home extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-        child: Container(
-      child: Column(
-        children: [
-          createAppBar('Good Morning'),
-          SizedBox(
-            height: 5,
-          ),
-          createGrid()
-        ],
-      ),
-      decoration: BoxDecoration(
-          gradient: LinearGradient(colors: [
-        Colors.blueGrey.shade300,
-        Colors.black,
-        Colors.black,
-        Colors.black
-      ], begin: Alignment.topLeft, end: Alignment.bottomRight)),
-      //color: Colors.blueGrey,
-    ));
+    return SingleChildScrollView(
+      child: SafeArea(
+          child: Container(
+        child: Column(
+          children: [
+            createAppBar('Good Morning'),
+            SizedBox(
+              height: 5,
+            ),
+            createGrid(),
+            createMusicList('Made For You'),
+            createMusicList('Popular Playlist')
+          ],
+        ),
+        decoration: BoxDecoration(
+            gradient: LinearGradient(colors: [
+          Colors.blueGrey.shade300,
+          Colors.black,
+          Colors.black,
+          Colors.black
+        ], begin: Alignment.topLeft, end: Alignment.bottomRight)),
+        //color: Colors.blueGrey,
+      )),
+    );
   }
 }
