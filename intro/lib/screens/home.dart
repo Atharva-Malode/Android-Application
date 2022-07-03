@@ -5,7 +5,10 @@ import 'package:intro/services/category_operation.dart';
 import 'package:intro/services/music_operations.dart';
 
 class Home extends StatelessWidget {
-  const Home({Key? key}) : super(key: key);
+  Function _miniplayer;
+  Home(this._miniplayer);
+
+  ///const Home({Key? key}) : super(key: key);
 
   Widget createCategory(category category) {
     return Container(
@@ -41,6 +44,9 @@ class Home extends StatelessWidget {
             height: 200,
             width: 200,
             child: InkWell(
+              onTap: () {
+                _miniplayer(music);
+              },
               child: Image.network(
                 music.image,
                 fit: BoxFit.cover,
